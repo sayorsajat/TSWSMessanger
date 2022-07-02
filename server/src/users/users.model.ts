@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { Room } from "src/rooms/rooms.model";
+import { UserRooms } from "src/rooms/user-rooms.model";
 import { CreateUserDto } from "./dto/create-user.dto";
 
 @Table({tableName: 'users'})
@@ -12,4 +14,7 @@ export class User extends Model<User, CreateUserDto> {
 
     @Column({type: DataType.STRING, allowNull: false})
     password: string;
+
+    @BelongsToMany(() => Room, () => UserRooms)
+    rooms: Room[];
 }
