@@ -7,7 +7,6 @@ import { UserRooms } from "./rooms/user-rooms.model";
 import { User } from "./users/users.model";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from './auth/auth.module';
-import { MicroserviceModule } from './microservice/microservice.module';
 
 @Module({
     imports: [
@@ -27,7 +26,6 @@ import { MicroserviceModule } from './microservice/microservice.module';
             autoLoadModels: true
         }),
         AuthModule,
-        MicroserviceModule,
     ]
 })
 export class AppModule {
