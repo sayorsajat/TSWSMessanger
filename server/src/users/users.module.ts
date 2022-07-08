@@ -12,5 +12,6 @@ import { UserRooms } from 'src/rooms/user-rooms.model';
   imports: [
     SequelizeModule.forFeature([User, Room, UserRooms])
   ],
+  exports: [UsersService]
 })
 export class UsersModule {}
