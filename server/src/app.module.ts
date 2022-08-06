@@ -7,6 +7,8 @@ import { UserRooms } from "./rooms/user-rooms.model";
 import { User } from "./users/users.model";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from './auth/auth.module';
+import { MessagesModule } from './messages/messages.module';
+import { Message } from "./messages/messages.model";
 
 @Module({
     imports: [
@@ -22,10 +24,11 @@ import { AuthModule } from './auth/auth.module';
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Room, UserRooms],
+            models: [User, Room, UserRooms, Message],
             autoLoadModels: true
         }),
         AuthModule,
+        MessagesModule,
     ]
 })
 export class AppModule {

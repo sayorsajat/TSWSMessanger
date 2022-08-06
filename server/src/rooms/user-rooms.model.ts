@@ -1,8 +1,7 @@
-import { BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { Room } from "src/rooms/rooms.model";
 import { User } from "src/users/users.model";
-import { CreateUserRoomDto } from "./dto/creat-user-room.dto";
-import { CreateRoomDto } from "./dto/create-room.dto";
+import { CreateUserRoomDto } from "./dto/create-user-room.dto";
 
 @Table({tableName: 'user_rooms', createdAt: false, updatedAt: false})
 export class UserRooms extends Model<UserRooms, CreateUserRoomDto> {
