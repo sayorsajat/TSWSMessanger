@@ -10,8 +10,9 @@ import {
  } from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { Logger } from '@nestjs/common';
+import { Logger, UploadedFile, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io'
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @WebSocketGateway(8000)
 export class MessagesGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
@@ -41,10 +42,12 @@ export class MessagesGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     client.join(room)
   }
 
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('newMessageToServer')
-  handleMessageFromClient(@MessageBody() createMessageDto: CreateMessageDto): void {
+  handleMessageFromClient(@MessageBody() createMessageDto: CreateMessageDto,
+                          @UploadedFile() image): void {
     //creates a new message in database, and sends it to other clients
-    const message = this.messagesService.createMessage(createMessageDto);
+    const message = this.messagesService.createMessage(createMessageDto, image);
   
     this.wss.to(this.room).emit('newMessageToClientsInRoom', message)
   }
