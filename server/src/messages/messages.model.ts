@@ -1,6 +1,6 @@
 import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
-import { Room } from "src/rooms/rooms.model";
-import { User } from "src/users/users.model";
+import { Room } from "../rooms/rooms.model";
+import { User } from "../users/users.model";
 import { MessageCreationAttrs } from "./types/create-message.type4model";
 
 

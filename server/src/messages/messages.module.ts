@@ -4,8 +4,8 @@ import { MessagesGateway } from './messages.gateway';
 import { MessagesController } from './messages.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Message } from './messages.model';
-import { FilesModule } from 'src/files/files.module';
 import { JwtModule } from '@nestjs/jwt';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   providers: [MessagesGateway, MessagesService],

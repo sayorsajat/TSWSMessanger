@@ -12,7 +12,7 @@ import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Logger, UploadedFile, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io'
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 @WebSocketGateway(8000)
 export class MessagesGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{

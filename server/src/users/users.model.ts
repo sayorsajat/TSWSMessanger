@@ -1,6 +1,6 @@
 import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
-import { Room } from "src/rooms/rooms.model";
-import { UserRooms } from "src/rooms/user-rooms.model";
+import { Room } from "../rooms/rooms.model";
+import { UserRooms } from "../rooms/user-rooms.model";
 import { CreateUserDto } from "./dto/create-user.dto";
 
 @Table({tableName: 'users'})
