@@ -3,16 +3,16 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './users.model';
-import { Room } from 'src/rooms/rooms.model';
-import { UserRooms } from 'src/rooms/user-rooms.model';
-import { AuthModule } from 'src/auth/auth.module';
-import { RoomsModule } from 'src/rooms/rooms.module';
+import { AuthModule } from '../auth/auth.module';
+import { Room } from '../rooms/rooms.model';
+import { RoomsModule } from '../rooms/rooms.module';
+import { UserRooms } from '../rooms/user-rooms.model';
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
-    SequelizeModule.forFeature([User, Room, UserRooms]),
+    SequelizeModule.forFeature([User, UserRooms]),
     RoomsModule,
     forwardRef(() => AuthModule)
   ],

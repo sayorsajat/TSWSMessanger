@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { devEndpointGuard } from 'src/guards/devEndpoint.guard';
+import { devEndpointGuard } from '../guards/devEndpoint.guard';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Message } from './messages.model';
 import { MessagesService } from './messages.service';
