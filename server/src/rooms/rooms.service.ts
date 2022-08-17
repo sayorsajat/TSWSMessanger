@@ -14,7 +14,7 @@ export class RoomsService {
   ) {}
 
   async createUserRoom(createUserRoomDto: CreateUserRoomDto) {
-    const room = await this.roomRepository.create(Object(createUserRoomDto.id))
+    const room = await this.roomRepository.create({id: createUserRoomDto.roomId})
     await this.userRoomsRepository.create(createUserRoomDto)
     return room
   }
