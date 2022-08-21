@@ -1,4 +1,4 @@
-import { HttpReqOption } from "../utils/options.factory";
+import { HttpReqOption } from "../utils/http-req-options.factory";
 let http = require('node:http')
 
 const exampleRoom = {
