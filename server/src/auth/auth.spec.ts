@@ -19,8 +19,8 @@ jest.setTimeout(20000)
 describe('AuthService', () => {
 
   describe('authorization', () => {
-    it('should authorize and return token', async () => {
-      const req = await http.request(options, (res) => {
+    it('should authorize and return token', () => {
+      const req = http.request(options, (res) => {
         res.setEncoding('utf8');
         res.on('data', (chunk) => {
           expect(Object.values(JSON.parse(chunk))).toBeDefined()

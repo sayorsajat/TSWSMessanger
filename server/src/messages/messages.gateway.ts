@@ -35,6 +35,7 @@ export class MessagesGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     this.logger.log(`Client connected: ${client.id}`);
   }
 
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string) {
     client.leave(this.room);
