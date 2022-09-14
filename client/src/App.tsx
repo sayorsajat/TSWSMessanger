@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material';
 import NavBar from './components/NavBar';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from './components/AppRouter';
 
 const darkTheme = createTheme({
   palette: {
@@ -13,7 +15,10 @@ function App() {
   return (
     <div className="App">
       <ThemeProvider theme={darkTheme}>
-        <NavBar />
+        <BrowserRouter>
+          <NavBar />
+          <AppRouter />
+        </BrowserRouter>
       </ThemeProvider>
     </div>
   );
