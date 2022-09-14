@@ -1,20 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../../app/store';
-import { fetchCount } from '../../counter/counterAPI';
-
-// type messageObject = {
-//   id: number
-//   roomId: string;
-//   userName: string;
-//   content: string;
-//   image: string | null;
-// }
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../../../app/store';
 
 export interface UserState {
   isLogin: boolean;
   user: object;
   // rooms: string[];
-  // messages: messageObject[]
 }
 
 const initialState: UserState = {
@@ -40,7 +30,6 @@ export const userSlice = createSlice({
 
 export const { setToLoggedIn, setToNotLoggedIn, setUserTo } = userSlice.actions;
 
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectUser = (state: RootState) => state.user.user;
 export const selectIsLogin = (state: RootState) => state.user.isLogin;
 
