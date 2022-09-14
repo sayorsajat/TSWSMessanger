@@ -13,6 +13,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TagIcon from '@mui/icons-material/Tag';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { selectIsLogin, setToLoggedIn } from '../features/redux/user/userSlice';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -77,6 +79,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const isLogin = useAppSelector(selectIsLogin);
+  const dispatch = useAppDispatch();
+
   const [toggleBar, setToggleBar] = React.useState(false)
   const theme = useTheme()
 
@@ -151,6 +156,18 @@ export default function NavBar() {
                 <ListItemText primary={"text"} />
               </ListItemButton>
             </ListItem>
+              {isLogin ?
+                <ListItem>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <TagIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"you are logged in"} />
+                  </ListItemButton>
+                </ListItem>
+              :
+                null
+              }
           </List>
       </Drawer>
     </Box>

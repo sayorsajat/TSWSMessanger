@@ -41,6 +41,7 @@ export const userSlice = createSlice({
 export const { setToLoggedIn, setToNotLoggedIn, setUserTo } = userSlice.actions;
 
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectUser = (state: RootState) => state.user;
+export const selectUser = (state: RootState) => state.user.user;
+export const selectIsLogin = (state: RootState) => state.user.isLogin;
 
 export default userSlice.reducer;
