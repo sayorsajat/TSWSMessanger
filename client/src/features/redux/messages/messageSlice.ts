@@ -32,6 +32,6 @@ export const messageSlice = createSlice({
 
 export const { setMessages, addNewMessage } = messageSlice.actions;
 
-export const selectMessages = (state: RootState) => state.user
+export const selectMessages = (state: RootState) => state.message.messages
 
 export default messageSlice.reducer;

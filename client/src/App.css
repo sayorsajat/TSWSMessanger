@@ -3,4 +3,6 @@
   box-sizing: "border-box";
 }
 
-/* zoom: 0.8 */
+::-webkit-scrollbar {
+  display: none;
+}             

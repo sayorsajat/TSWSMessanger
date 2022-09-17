@@ -12,9 +12,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TagIcon from '@mui/icons-material/Tag';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import { Button, CssBaseline, Divider, Drawer, Icon, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectIsLogin, setToLoggedIn } from '../features/redux/user/userSlice';
+import { selectIsLogin, selectUser, setToLoggedIn } from '../features/redux/user/userSlice';
+import { addNewRoom, selectRooms, setRoomsTo } from '../features/redux/rooms/roomsSlice';
+import { useEffect } from 'react';
+import { joinRoom, loadRooms } from '../http/messageAPI';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -80,96 +85,131 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function NavBar() {
   const isLogin = useAppSelector(selectIsLogin);
+  const {id}: any = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const rooms = useAppSelector(selectRooms);
+  const navigate = useNavigate();
 
   const [toggleBar, setToggleBar] = React.useState(false)
+  const [roomToJoin, setRoomToJoin] = React.useState('')
   const theme = useTheme()
+
+  const handleJoinRoom = (e: any) => {
+    e.preventDefault();
+    joinRoom(id, roomToJoin).then(data => {
+      dispatch(addNewRoom({roomId: roomToJoin, id}));
+      setRoomToJoin('');
+    })
+  }
+
+  useEffect(() => {
+    loadRooms(id).then(data => {
+      dispatch(setRoomsTo(data));
+    })
+  }, [isLogin])
+  
 
   return (
     <Box className='navbar' sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-            onClick={() => setToggleBar(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            {/* Logo */}
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              style={{transition: 'none'}}
-            />
-          </Search>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: 250,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
+      <CssBaseline />
+      {isLogin ?
+      <>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
+              onClick={() => setToggleBar(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            >
+              {/* Logo */}
+            </Typography>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                style={{transition: 'none'}}
+              />
+            </Search>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
             width: 250,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={toggleBar}
-      >
-        <DrawerHeader>
-          <Search>
-            <SearchIconWrapper>
-              <AddBoxIcon />
-            </SearchIconWrapper>
-            <StyledModifInputBase
-              placeholder="Join"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <IconButton onClick={() => setToggleBar(false)}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-          <List>
-            <ListItem>
-              <ListItemButton>
-                <ListItemIcon>
-                  <TagIcon />
-                </ListItemIcon>
-                <ListItemText primary={"text"} />
-              </ListItemButton>
-            </ListItem>
-              {isLogin ?
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: 250,
+              boxSizing: 'border-box',
+            },
+          }}
+          style={{overflow: "hidden"}}
+          variant="persistent"
+          anchor="left"
+          open={toggleBar}
+        >
+          <div style={{overflow: "auto"}}>
+            <DrawerHeader>
+              <form onSubmit={handleJoinRoom}>
+                <Search>
+                  <SearchIconWrapper>
+                    <AddBoxIcon />
+                  </SearchIconWrapper>
+                  <StyledModifInputBase
+                    placeholder="Join"
+                    inputProps={{ 'aria-label': 'search' }}
+                    value={roomToJoin}
+                    onChange={e => {
+                      setRoomToJoin(e.target.value)
+                    }}
+                  />
+                </Search>
+              </form>
+              <IconButton onClick={() => setToggleBar(false)}>
+                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              {rooms.map((room: any) => 
                 <ListItem>
-                  <ListItemButton>
+                  <ListItemButton onClick={() => {
+                    navigate()
+                  }}>
                     <ListItemIcon>
                       <TagIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"you are logged in"} />
+                    <ListItemText primary={room.roomId} />
                   </ListItemButton>
                 </ListItem>
-              :
-                null
-              }
-          </List>
-      </Drawer>
+              )}
+            </List>
+          </div>
+        </Drawer>
+      </>
+      :
+      <AppBar position="static">
+        <Toolbar sx={{flexDirection: "row-reverse"}}>
+          <Button style={{color: "inherit"}}>
+            login
+            <LoginIcon style={{marginLeft: "6px"}} />
+          </Button>
+        </Toolbar>
+      </AppBar>
+      }
+      
     </Box>
   );
 }

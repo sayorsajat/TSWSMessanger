@@ -4,7 +4,6 @@ import { RootState } from '../../../app/store';
 export interface UserState {
   isLogin: boolean;
   user: object;
-  // rooms: string[];
 }
 
 const initialState: UserState = {

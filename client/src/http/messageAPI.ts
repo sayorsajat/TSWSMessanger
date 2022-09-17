@@ -1,16 +1,16 @@
 import { $authHost } from './index';
 
 export const joinRoom = async (userId: number, roomId: string) => {
-    const {data} = await $authHost.post('api/rooms', {userId, roomId})
+    const {data} = await $authHost.post('/rooms', {userId, roomId})
     return data
 }
 
 export const loadRooms = async (userId: number) => {
-    const {data} = await $authHost.get(`api/rooms/${userId}`)
+    const {data} = await $authHost.get(`/rooms/${userId}`)
     return data
 }
 
 export const loadMessages = async (roomId: string) => {
-    const {data} = await $authHost.post('api/messages/findAll', {id: roomId})
+    const {data} = await $authHost.post('/messages/findAll', {id: roomId})
     return data
 }
