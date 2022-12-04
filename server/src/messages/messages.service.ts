@@ -17,7 +17,7 @@ export class MessagesService {
 
   async createMessage(createMessageDto: CreateMessageDto, image: any): Promise<Message> {
     let fileName = null;
-    if (image !== undefined ) {
+    if (image !== null && image !== undefined) {
       fileName = (await this.filesService.createJpgFile(image.buffer)).toString();
     }
     const message = await this.messageRepository.create({...createMessageDto, image: fileName});

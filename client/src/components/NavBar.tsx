@@ -13,13 +13,14 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TagIcon from '@mui/icons-material/Tag';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LoginIcon from '@mui/icons-material/Login';
-import { Button, CssBaseline, Divider, Drawer, Icon, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Button, CssBaseline, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { selectIsLogin, selectUser, setToLoggedIn } from '../features/redux/user/userSlice';
+import { selectIsLogin, selectUser } from '../features/redux/user/userSlice';
 import { addNewRoom, selectRooms, setRoomsTo } from '../features/redux/rooms/roomsSlice';
 import { useEffect } from 'react';
 import { joinRoom, loadRooms } from '../http/messageAPI';
 import { useNavigate } from 'react-router-dom';
+import { ROOM_WITH_PARAM_ROUTE } from '../lib/utils/routes';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -103,9 +104,11 @@ export default function NavBar() {
   }
 
   useEffect(() => {
-    loadRooms(id).then(data => {
-      dispatch(setRoomsTo(data));
-    })
+    if(isLogin) {
+      loadRooms(id).then(data => {
+        dispatch(setRoomsTo(data));
+      })
+    }
   }, [isLogin])
   
 
@@ -184,9 +187,9 @@ export default function NavBar() {
             <Divider />
             <List>
               {rooms.map((room: any) => 
-                <ListItem>
+                <ListItem key={room.roomId}>
                   <ListItemButton onClick={() => {
-                    navigate()
+                    navigate(ROOM_WITH_PARAM_ROUTE(room.roomId))
                   }}>
                     <ListItemIcon>
                       <TagIcon />

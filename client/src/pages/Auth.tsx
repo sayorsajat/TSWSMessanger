@@ -20,7 +20,6 @@ export const Auth = () => {
         if (isLogin) {
           data = await login(userName, password)
         } else {
-          console.log(process.env.REACT_APP_BASE_URL)
           data = await registration(userName, password);
         }
         const dataa = {...data}

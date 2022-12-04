@@ -10,13 +10,16 @@ import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
 import { Message } from "./messages/messages.model";
 import { FilesModule } from './files/files.module';
+import { ConfigService } from "./config.service";
 
 @Module({
     imports: [
         UsersModule,
         RoomsModule,
         ConfigModule.forRoot({
-            envFilePath: `.${process.env.NODE_ENV}.env`
+            envFilePath: `.${process.env.NODE_ENV}.env`,
+            
+            isGlobal: true,
         }),
         SequelizeModule.forRoot({
             dialect: 'postgres',
@@ -31,6 +34,9 @@ import { FilesModule } from './files/files.module';
         AuthModule,
         MessagesModule,
         FilesModule,
+    ],
+    providers: [
+        ConfigService,
     ]
 })
 export class AppModule {

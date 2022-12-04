@@ -21,7 +21,7 @@ export const userSlice = createSlice({
     setToNotLoggedIn: (state) => {
       state.isLogin = false;
     },
-    setUserTo: (state, action: PayloadAction<object>) => {
+    setUserTo: (state, action: PayloadAction<object>): any => {
       state.user = action.payload;
     },
   },
