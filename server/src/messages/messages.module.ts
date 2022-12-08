@@ -6,6 +6,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Message } from './messages.model';
 import { JwtModule } from '@nestjs/jwt';
 import { FilesModule } from '../files/files.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   providers: [MessagesGateway, MessagesService],
@@ -13,7 +14,8 @@ import { FilesModule } from '../files/files.module';
   imports: [
     SequelizeModule.forFeature([Message]),
     FilesModule,
-    JwtModule
+    JwtModule,
+    AuthModule
   ]
 })
 export class MessagesModule {}

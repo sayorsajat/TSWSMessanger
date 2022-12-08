@@ -11,6 +11,8 @@ import { MessagesModule } from './messages/messages.module';
 import { Message } from "./messages/messages.model";
 import { FilesModule } from './files/files.module';
 import { ConfigService } from "./config.service";
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from "path";
 
 @Module({
     imports: [
@@ -34,12 +36,14 @@ import { ConfigService } from "./config.service";
         AuthModule,
         MessagesModule,
         FilesModule,
+        ServeStaticModule.forRoot({
+            rootPath: path.resolve(__dirname, 'static'),
+        })
     ],
     providers: [
         ConfigService,
     ]
 })
 export class AppModule {
-    
 }
 

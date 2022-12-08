@@ -10,10 +10,12 @@ import {
  } from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { Logger, UploadedFile, UseGuards } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Socket, Server } from 'socket.io'
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { JwtWsAuthGuard } from '../auth/auth.ws.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthWsFakeware } from '../auth/auth.ws.fakeware';
 
 interface IJoinRoomDto {
   roomId: string
@@ -22,7 +24,8 @@ interface IJoinRoomDto {
 
 @WebSocketGateway(8000, {cors: "localhost:3000"})
 export class MessagesGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(private readonly messagesService: MessagesService,
+              private readonly fakewareService: AuthWsFakeware) {}
     
   @WebSocketServer() wss: Server;
 
@@ -47,19 +50,25 @@ export class MessagesGateway implements OnGatewayInit, OnGatewayConnection, OnGa
   handleJoinRoom(client: Socket, data: IJoinRoomDto) {
     client.leave(this.room);
     this.room = data.roomId;
-    this.logger.log(this.room);
     client.join(data.roomId);
   }
 
-  @UseGuards(JwtWsAuthGuard)
+  // @MessageBody() createMessageDto: CreateMessageDto,
+  //                         @UploadedFile() image
+  // @UseGuards(JwtWsAuthGuard)
   @SubscribeMessage('newMessageToServer')
-  handleMessageFromClient(@MessageBody() createMessageDto: CreateMessageDto,
-                          @UploadedFile() image): void {
+  // @UseInterceptors(FileInterceptor('image'))
+  handleMessageFromClient(client: Socket, data: any): void {
     //creates a new message in database, and sends it to other clients
-    const message = this.messagesService.createMessage(createMessageDto, image);
-    this.logger.log(this.room);
-    message.then(data => {
-      this.wss.to(this.room).emit('newMessageToClientsInRoom', data);
-    })
+    this.logger.log(data.formData);
+    if(this.fakewareService.isLegitWSMessage(data.formData)) {
+      const message = this.messagesService.createMessage(data.formData, data.image);
+      
+      message.then(data => {
+        this.wss.to(this.room).emit('newMessageToClientsInRoom', data);
+      })
+    } else {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
   }
 }

@@ -8,13 +8,14 @@ import { JwtModule, JwtSecretRequestType } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from "../config.service";
+import { AuthWsFakeware } from "./auth.ws.fakeware";
 //configService.get<string>("envFilePath")
 const configService: ConfigService = new ConfigService();
 const secKey = configService.privateKey;
-console.log(secKey);
+
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AuthWsFakeware],
   imports: [
     forwardRef(() => UsersModule),
     JwtModule.register({
@@ -27,6 +28,7 @@ console.log(secKey);
     }),
   ],
   exports: [
+    AuthWsFakeware,
     AuthService,
     JwtModule,
   ]

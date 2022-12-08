@@ -19,8 +19,8 @@ export const Room = () => {
   const {userName}: any = useAppSelector(selectUser);
   const {id}: any = useAppSelector(selectUser);
 
-  const [currentMessage, setCurrentMessage] = useState('')
-  const [file, setFile] = useState(null)
+  const [currentMessage, setCurrentMessage] = useState('');
+  const [file, setFile] = useState(null);
 
   const {roomId} = useParams();
 
@@ -35,16 +35,14 @@ export const Room = () => {
   }, [roomId])
   
   const handleMessageSubmit = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    socket.emit('newMessageToServer', {
-      authorization: localStorage.getItem('token'),
-      content: currentMessage, 
-      roomId,
-      userId: id,
-      userName,
-      image: String(file)
-    });
+    socket.emit('newMessageToServer', {formData: {content: currentMessage, 
+      roomId: roomId, 
+      userName: userName, 
+      authorization: String(localStorage.getItem('token'))}, 
+      image: file});
+    
     setFile(null)
     setCurrentMessage('')
   }
@@ -72,8 +70,9 @@ export const Room = () => {
                 onChange={(e) => {
                   const target = e.target as HTMLInputElement;
                   if (target.files![0]) {
-                    let imageObject: any = target.files![0]
+                    let imageObject: any = (e.target as HTMLInputElement).files![0];
                     setFile(imageObject)
+                    console.log(imageObject);
                   }
                 }}
               />
