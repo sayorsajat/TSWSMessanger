@@ -10,13 +10,18 @@ import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
 import { Message } from "./messages/messages.model";
 import { FilesModule } from './files/files.module';
+import { ConfigService } from "./config.service";
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from "path";
 
 @Module({
     imports: [
         UsersModule,
         RoomsModule,
         ConfigModule.forRoot({
-            envFilePath: `.${process.env.NODE_ENV}.env`
+            envFilePath: `.${process.env.NODE_ENV}.env`,
+            
+            isGlobal: true,
         }),
         SequelizeModule.forRoot({
             dialect: 'postgres',
@@ -31,9 +36,14 @@ import { FilesModule } from './files/files.module';
         AuthModule,
         MessagesModule,
         FilesModule,
+        ServeStaticModule.forRoot({
+            rootPath: path.resolve(__dirname, 'static'),
+        })
+    ],
+    providers: [
+        ConfigService,
     ]
 })
 export class AppModule {
-    
 }
 

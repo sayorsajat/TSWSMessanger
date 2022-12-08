@@ -14,7 +14,12 @@ export class RoomsService {
   ) {}
 
   async createUserRoom(createUserRoomDto: CreateUserRoomDto) {
-    const room = await this.roomRepository.create({id: createUserRoomDto.roomId})
+    const doesRoomAlreadyExist = await this.roomRepository.findOne({where: {id: createUserRoomDto.roomId}});
+    let room;
+    if(!doesRoomAlreadyExist) {
+      room = await this.roomRepository.create({id: createUserRoomDto.roomId})
+    };
+    
     await this.userRoomsRepository.create(createUserRoomDto)
     return room
   }

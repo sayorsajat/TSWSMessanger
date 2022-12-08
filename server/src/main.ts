@@ -17,6 +17,7 @@ async function start() {
         // .addTag('')
         .build()
     
+    app.enableCors({origin: 'http://localhost:3000'})
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/api/docs', app, document);
      
